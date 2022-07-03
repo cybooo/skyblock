@@ -1,0 +1,5 @@
+name: SkyBlock
+version: 1.0
+main: com.github.cybooo.skyblock.skyblock.SkyBlockPlugin
+api-version: 1.19
+author: cybooo
