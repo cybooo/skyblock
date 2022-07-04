@@ -1,7 +1,6 @@
 package com.github.cybooo.skyblock.skyblock.listeners;
 
 import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
@@ -38,7 +39,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
             event.setCancelled(true);
         }
     }
@@ -46,11 +47,30 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
             event.setCancelled(true);
         }
     }
 
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
 
+        Player player = event.getPlayer();
+        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player player) {
+            if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+                event.setCancelled(true);
+            }
+        }
+    }
 
 }

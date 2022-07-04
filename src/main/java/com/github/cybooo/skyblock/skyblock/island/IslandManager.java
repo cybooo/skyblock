@@ -65,7 +65,7 @@ public class IslandManager {
             }
         }
         if (islandWorld == null) {
-            player.sendMessage("§cNebyl nalezen zadny volny svet pro tvuj ostrov!");
+            player.sendMessage("§cNebyl nalezen žádný volný svět pro tvůj ostrov, kontaktuj administrátory!");
             return;
         }
         try (Connection connection = plugin.getMariaDB().getConnection();
@@ -107,8 +107,10 @@ public class IslandManager {
         setIslandSpawn(island, center);
         setIslandCenter(island, center);
 
+        // Dáme pluginu čas na správný vygenerování ostrova.
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             player.teleport(island.getSpawnLocation());
+            player.sendTitle("§c§lSkyBlock", "§7Užij si hru!", 5, 40, 5);
         }, 20L);
     }
 
@@ -168,10 +170,10 @@ public class IslandManager {
         int maxX = island.getIslandCenter().getBlockX() + 150;
         int minZ = island.getIslandCenter().getBlockZ() - 150;
         int maxZ = island.getIslandCenter().getBlockZ() + 150;
-        if (player.getLocation().getBlockX() >= minX && player.getLocation().getBlockX() <= maxX) {
-            return player.getLocation().getBlockZ() < minZ || player.getLocation().getBlockZ() > maxZ;
+        if (player.getLocation().getBlockX() <= minX && player.getLocation().getBlockX() <= maxX) {
+            return player.getLocation().getBlockZ() <= minZ && player.getLocation().getBlockZ() <= maxZ;
         }
-        return true;
+        return false;
     }
 
     public String getIslandWorldNamePrefix() {

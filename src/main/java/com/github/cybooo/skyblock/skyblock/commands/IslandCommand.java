@@ -25,12 +25,13 @@ public class IslandCommand implements CommandExecutor {
         Island island = plugin.getIslandManager().getIsland(player);
         if (island == null) {
             if (!plugin.getIslandManager().hasIsland(player)) {
-                player.sendMessage("§aVytvarim tvuj ostrov..");
+                player.sendTitle("§6§lSkyBlock", "§7Vytvářím tvůj ostrov..", 5, 40, 5);
                 plugin.getIslandManager().createIsland(player);
             } else {
-                player.sendMessage("§cTvuj ostrov neni na tomto serveru dostupny!");
+                player.sendMessage("§cTvůj ostrov není na tomto serveru dostupný!");
             }
         } else {
+            player.sendMessage("§aTeleportuji na tvůj ostrov..");
             player.teleport(island.getSpawnLocation());
         }
         return true;

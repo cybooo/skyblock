@@ -31,7 +31,7 @@ public class SetSpawnCommand implements CommandExecutor {
             plugin.saveConfig();
             player.sendMessage("§aSpawn nastaven!");
         } else {
-            player.sendMessage("§cNemas opravneni!");
+            player.sendMessage("§cNemáš oprávnění!");
         }
         return true;
     }
