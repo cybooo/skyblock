@@ -70,9 +70,9 @@ public class IslandManager {
         }
         try (Connection connection = plugin.getMariaDB().getConnection();
              PreparedStatement preparedStatement =
-                     connection.prepareStatement("INSERT INTO skyblock_islands (owner, server_port, island_world, island_center, spawn_location) VALUES (?, ?, ?, ?);",
+                     connection.prepareStatement("INSERT INTO skyblock_islands (owner, server_port, island_world, island_center, spawn_location) VALUES (?, ?, ?, ?, ?);",
                              Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.setString(1, player.getName());
             preparedStatement.setInt(2, plugin.getServer().getPort());
             preparedStatement.setString(3, islandWorld);
             preparedStatement.setString(4, "0,0,0,0,0");
@@ -115,7 +115,7 @@ public class IslandManager {
     public boolean hasIsland(Player player) {
         try (Connection connection = plugin.getMariaDB().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skyblock_islands WHERE owner = ? AND server_port = ?;")) {
-            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.setString(1, player.getName());
             preparedStatement.setInt(2, plugin.getServer().getPort());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();

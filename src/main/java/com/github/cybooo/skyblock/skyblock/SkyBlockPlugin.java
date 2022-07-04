@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class SkyBlockPlugin extends JavaPlugin {
 
@@ -56,6 +57,7 @@ public class SkyBlockPlugin extends JavaPlugin {
                         slimePlugin.createEmptyWorld(slimeLoader, islandManager.getIslandWorldNamePrefix() + i, false,
                                 new SlimePropertyMap());
                         getLogger().info("Svet " + islandManager.getIslandWorldNamePrefix() + i + " vytvoren!");
+                        islandManager.getIslands().putIfAbsent(islandManager.getIslandWorldNamePrefix() + i, new HashMap<>());
                     } catch (WorldAlreadyExistsException | IOException e) {
                         getLogger().warning("Nastala chyba!");
                         e.printStackTrace();
@@ -73,6 +75,7 @@ public class SkyBlockPlugin extends JavaPlugin {
 
                     try {
                         slimePlugin.loadWorld(slimeLoader, islandManager.getIslandWorldNamePrefix() + i, false, new SlimePropertyMap());
+                        islandManager.getIslands().putIfAbsent(islandManager.getIslandWorldNamePrefix() + i, new HashMap<>());
                     } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                              WorldInUseException e) {
                         e.printStackTrace();
