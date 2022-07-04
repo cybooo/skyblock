@@ -27,8 +27,7 @@ public class IslandManager {
 
     public void loadIslands() {
         try (Connection connection = plugin.getMariaDB().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skyblock_islands WHERE server_port = ?;");
-             PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM island_members WHERE island_id = ?;")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skyblock_islands WHERE server_port = ?;")) {
             preparedStatement.setInt(1, plugin.getServer().getPort());
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -53,19 +52,36 @@ public class IslandManager {
                         Double.parseDouble(spawnLocationString[2]),
                         Float.parseFloat(spawnLocationString[3]),
                         Float.parseFloat(spawnLocationString[4]));
-                List<String> members = new ArrayList<>();
 
-                ResultSet resultSet1 = preparedStatement1.getResultSet();
-                while (resultSet1 != null && resultSet1.next()) {
-                    members.add(resultSet1.getString("player_name"));
-                }
-
-
-                islands.get(islandWorld).put(owner, new Island(id, owner, createdMillis, islandWorld, center, spawnLocation, members));
+                islands.get(islandWorld).put(owner, new Island(id, owner, createdMillis, islandWorld, center, spawnLocation, new ArrayList<>()));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+
+        try (Connection connection = plugin.getMariaDB().getConnection()) {
+            for (Map.Entry<String, HashMap<String, Island>> entry : islands.entrySet()) {
+                HashMap<String, Island> islandHashMap = entry.getValue();
+                try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM island_members WHERE island_id = ?;")) {
+                    for (Map.Entry<String, Island> entry1 : islandHashMap.entrySet()) {
+                        preparedStatement.setInt(1, entry1.getValue().getId());
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        List<String> members = new ArrayList<>();
+                        Bukkit.getLogger().info("Loading members for island " + entry1.getValue().getId());
+                        while (resultSet.next()) {
+                            members.add(resultSet.getString("player_name"));
+                            plugin.getLogger().info("Loaded member: " + resultSet.getString("player_name"));
+                        }
+                        entry1.getValue().getMembers().addAll(members);
+                    }
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
     }
 
     public void createIsland(Player player) {
@@ -211,6 +227,19 @@ public class IslandManager {
                  PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO island_members (island_id, player_name) VALUES (?, ?);")) {
                 preparedStatement.setInt(1, island.getId());
                 preparedStatement.setString(2, player.getName());
+                preparedStatement.executeUpdate();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    public void removeMemberFromIsland(String player, Island island) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try (Connection connection = plugin.getMariaDB().getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM island_members WHERE island_id = ? AND player_name = ?;")) {
+                preparedStatement.setInt(1, island.getId());
+                preparedStatement.setString(2, player);
                 preparedStatement.executeUpdate();
             } catch (SQLException exception) {
                 exception.printStackTrace();

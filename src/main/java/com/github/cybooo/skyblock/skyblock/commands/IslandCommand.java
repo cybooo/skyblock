@@ -62,6 +62,10 @@ public class IslandCommand implements CommandExecutor {
                         player.sendMessage("§cPožadovaný hráč není online!");
                         return false;
                     }
+                    if (target.getName().equals(player.getName())) {
+                        player.sendMessage("§cNemůžeš zvát sám sebe!");
+                        return false;
+                    }
                     if (plugin.getIslandManager().getIsland(player) == null) {
                         player.sendMessage("§cNemáš žádný ostrov!");
                         return false;
@@ -72,6 +76,10 @@ public class IslandCommand implements CommandExecutor {
                     }
                     if (plugin.getIslandManager().getIsland(target) != null) {
                         player.sendMessage("§cPožadovaný hráč již je na jiném ostrově!");
+                        return false;
+                    }
+                    if (!plugin.getIslandManager().getIsland(player).getOwner().equals(player.getName())) {
+                        player.sendMessage("§cNejsi vlastník ostrova!");
                         return false;
                     }
                     ConcurrentMap<Player, Player> map = invites.asMap();
@@ -113,6 +121,7 @@ public class IslandCommand implements CommandExecutor {
                         return false;
                     }
                     Bukkit.getPlayer(inviterIsland.getOwner()).sendMessage("§7Hráč §e" + player.getName() + "§7 příjmul tvojí pozvánku!");
+                    player.sendMessage("§aPozvánka přijata!");
                     inviterIsland.getMembers().add(player.getName());
                     plugin.getIslandManager().addMemberToIsland(player, inviterIsland);
                 }

@@ -33,7 +33,7 @@ public class ControlPanelMenu implements Listener {
         }
 
         Inventory inventory = Bukkit.createInventory(null, 4 * 9, "Ovládací panel");
-        fillBorders(inventory);
+        Utils.fillBorders(inventory);
 
         ItemStack info = new ItemStack(Material.BOOK);
         ItemMeta infoItemMeta = info.getItemMeta();
@@ -42,6 +42,7 @@ public class ControlPanelMenu implements Listener {
                 "",
                 "§7Vlastník: §a" + island.getOwner(),
                 "§7Datum vytvoření: §a" + Utils.millisToDate(island.getCreatedMillis()),
+                "§7Členové: §a" + island.getMembers() + "/4",
                 ""
         ));
         info.setItemMeta(infoItemMeta);
@@ -74,42 +75,11 @@ public class ControlPanelMenu implements Listener {
             }
             Player player = (Player) event.getWhoClicked();
             switch (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())) {
-                case "Seznam členů":
-                    break;
-                case "Teleport na ostrov":
-                    player.teleport(plugin.getIslandManager().getIsland(player).getSpawnLocation());
-                    break;
+                case "Seznam členů" -> plugin.getMenuManager().getMemberListMenu().open(player);
+                case "Teleport na ostrov" -> player.teleport(plugin.getIslandManager().getIsland(player).getSpawnLocation());
             }
         }
     }
 
-    private void fillBorders(Inventory inventory) {
-        ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta == null) return;
-
-        meta.setDisplayName(" ");
-        item.setItemMeta(meta);
-
-        int size = inventory.getSize();
-        int rows = size / 9;
-
-        if (rows >= 3) {
-            for (int i = 0; i <= 8; i++) {
-                inventory.setItem(i, item);
-            }
-
-            for (int s = 8; s < (inventory.getSize() - 9); s += 9) {
-                int lastSlot = s + 1;
-                inventory.setItem(s, item);
-                inventory.setItem(lastSlot, item);
-            }
-
-            for (int lr = (inventory.getSize() - 9); lr < inventory.getSize(); lr++) {
-                inventory.setItem(lr, item);
-            }
-        }
-    }
 
 }
