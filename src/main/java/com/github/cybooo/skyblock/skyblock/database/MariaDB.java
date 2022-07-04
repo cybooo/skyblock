@@ -2,7 +2,9 @@ package com.github.cybooo.skyblock.skyblock.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class MariaDB {
@@ -19,9 +21,19 @@ public class MariaDB {
         hikariDataSource.setMaximumPoolSize(5);
         hikariDataSource.setMinimumIdle(5);
         hikariDataSource.setPoolName("skyblock-mariadb");
-        hikariDataSource.addDataSourceProperty("url", "jdbc:mariadb://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=UTF-8&useSSL=false");
+        hikariDataSource.addDataSourceProperty("url",
+                "jdbc:mariadb://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=UTF-8&useSSL=false");
         hikariDataSource.addDataSourceProperty("user", username);
         hikariDataSource.addDataSourceProperty("password", password);
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(
+                             "CREATE TABLE IF NOT EXISTS skyblock_islands (id INT NOT NULL AUTO_INCREMENT, owner VARCHAR(16) NOT NULL, island_world VARCHAR(16) NOT NULL, island_center VARCHAR(64) NOT NULL, spawn_location VARCHAR(64) NOT NULL, server_port INT NOT NULL, PRIMARY KEY (id));")) {
+            preparedStatement.execute();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
 
     }
 

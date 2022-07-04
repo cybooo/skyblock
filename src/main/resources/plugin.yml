@@ -1,5 +1,10 @@
 name: SkyBlock
 version: 1.0
 main: com.github.cybooo.skyblock.skyblock.SkyBlockPlugin
-api-version: 1.19
+api-version: 1.18
+load: POSTWORLD
 author: cybooo
+depend: [SlimeWorldManager, FastAsyncWorldEdit]
+commands:
+  setspawn:
+  island:

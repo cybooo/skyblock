@@ -1,7 +1,11 @@
 database:
-  host:
-  port:
-  username:
-  password:
-  database:
+  host: ""
+  port: 3306
+  username: ""
+  password: ""
+  database: ""
 
+settings:
+  server-id: 1
+  island-worlds: 1
+  islands-per-world: 10
