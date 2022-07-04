@@ -29,8 +29,25 @@ public class MariaDB {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(
-                             "CREATE TABLE IF NOT EXISTS skyblock_islands (id INT NOT NULL AUTO_INCREMENT, owner VARCHAR(16) NOT NULL, island_world VARCHAR(16) NOT NULL, island_center VARCHAR(64) NOT NULL, spawn_location VARCHAR(64) NOT NULL, server_port INT NOT NULL, PRIMARY KEY (id));")) {
+                             "CREATE TABLE IF NOT EXISTS skyblock_islands (id INT NOT NULL AUTO_INCREMENT," +
+
+                                     " owner VARCHAR(16) NOT NULL," +
+                                     " server_port INT NOT NULL," +
+                                     " date_created BIGINT NOT NULL," +
+                                     " island_world VARCHAR(16) NOT NULL," +
+                                     " island_center VARCHAR(64) NOT NULL," +
+                                     " spawn_location VARCHAR(64) NOT NULL," +
+
+                                     " PRIMARY KEY (id));");
+             PreparedStatement preparedStatement1 = connection.prepareStatement(
+                     "CREATE TABLE IF NOT EXISTS island_members (" +
+
+                             "island_id INT NOT NULL," +
+                             " player_name VARCHAR(16) NOT NULL" +
+
+                             ")")) {
             preparedStatement.execute();
+            preparedStatement1.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

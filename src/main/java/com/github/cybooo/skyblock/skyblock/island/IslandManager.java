@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class IslandManager {
@@ -25,12 +27,15 @@ public class IslandManager {
 
     public void loadIslands() {
         try (Connection connection = plugin.getMariaDB().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skyblock_islands WHERE server_port = ?;")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM skyblock_islands WHERE server_port = ?;");
+             PreparedStatement preparedStatement1 = connection.prepareStatement("SELECT * FROM island_members WHERE island_id = ?;")) {
             preparedStatement.setInt(1, plugin.getServer().getPort());
             ResultSet resultSet = preparedStatement.executeQuery();
+
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String owner = resultSet.getString("owner");
+                long createdMillis = resultSet.getLong("date_created");
                 String islandWorld = resultSet.getString("island_world");
 
                 String[] centerString = resultSet.getString("island_center").split(",");
@@ -48,8 +53,15 @@ public class IslandManager {
                         Double.parseDouble(spawnLocationString[2]),
                         Float.parseFloat(spawnLocationString[3]),
                         Float.parseFloat(spawnLocationString[4]));
+                List<String> members = new ArrayList<>();
 
-                islands.get(islandWorld).put(owner, new Island(id, owner, islandWorld, center, spawnLocation));
+                ResultSet resultSet1 = preparedStatement1.getResultSet();
+                while (resultSet1 != null && resultSet1.next()) {
+                    members.add(resultSet1.getString("player_name"));
+                }
+
+
+                islands.get(islandWorld).put(owner, new Island(id, owner, createdMillis, islandWorld, center, spawnLocation, members));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -70,13 +82,14 @@ public class IslandManager {
         }
         try (Connection connection = plugin.getMariaDB().getConnection();
              PreparedStatement preparedStatement =
-                     connection.prepareStatement("INSERT INTO skyblock_islands (owner, server_port, island_world, island_center, spawn_location) VALUES (?, ?, ?, ?, ?);",
+                     connection.prepareStatement("INSERT INTO skyblock_islands (owner, server_port, date_created, island_world, island_center, spawn_location) VALUES (?, ?, ?, ?, ?, ?);",
                              Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, player.getName());
             preparedStatement.setInt(2, plugin.getServer().getPort());
-            preparedStatement.setString(3, islandWorld);
-            preparedStatement.setString(4, "0,0,0,0,0");
-            preparedStatement.setString(5, "0,0,0");
+            preparedStatement.setLong(3, System.currentTimeMillis());
+            preparedStatement.setString(4, islandWorld);
+            preparedStatement.setString(5, "0,0,0,0,0");
+            preparedStatement.setString(6, "0,0,0");
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -102,7 +115,7 @@ public class IslandManager {
 
         plugin.getSchematicLoader().pasteSchematic(center);
 
-        Island island = new Island(islandId, player.getName(), islandWorld, center, center);
+        Island island = new Island(islandId, player.getName(), System.currentTimeMillis(), islandWorld, center, center, new ArrayList<>());
         islands.get(islandWorld).put(player.getName(), island);
         setIslandSpawn(island, center);
         setIslandCenter(island, center);
@@ -120,11 +133,50 @@ public class IslandManager {
             preparedStatement.setString(1, player.getName());
             preparedStatement.setInt(2, plugin.getServer().getPort());
             ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
+            return resultSet.next() || getIslandIdByMember(player) != -1;
         } catch (SQLException exception) {
             exception.printStackTrace();
             return false;
         }
+    }
+
+    public int getIslandIdByMember(Player player) {
+        try (Connection connection = plugin.getMariaDB().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM island_members WHERE player_name = ?;")) {
+            preparedStatement.setString(1, player.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("island_id");
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return -1;
+    }
+
+    public Island getIslandByMember(Player player) {
+        try (Connection connection = plugin.getMariaDB().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM island_members WHERE player_name = ?;")) {
+            preparedStatement.setString(1, player.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return getIslandById(resultSet.getInt("island_id"));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public Island getIslandById(int islandId) {
+        for (String islandWorld : islands.keySet()) {
+            for (Island island : islands.get(islandWorld).values()) {
+                if (island.getId() == islandId) {
+                    return island;
+                }
+            }
+        }
+        return null;
     }
 
     public void setIslandSpawn(Island island, Location spawn) {
@@ -153,11 +205,32 @@ public class IslandManager {
         });
     }
 
+    public void addMemberToIsland(Player player, Island island) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try (Connection connection = plugin.getMariaDB().getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO island_members (island_id, player_name) VALUES (?, ?);")) {
+                preparedStatement.setInt(1, island.getId());
+                preparedStatement.setString(2, player.getName());
+                preparedStatement.executeUpdate();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
     public Island getIsland(Player player) {
         for (String islandWorld : islands.keySet()) {
             if (islands.get(islandWorld).get(player.getName()) != null) {
                 return islands.get(islandWorld).get(player.getName());
             }
+            for (String owner : islands.get(islandWorld).keySet()) {
+                if (islands.get(islandWorld).get(owner).getMembers().contains(player.getName())) {
+                    return islands.get(islandWorld).get(owner);
+                }
+            }
+        }
+        if (getIslandIdByMember(player) != -1) {
+            return getIslandById(getIslandIdByMember(player));
         }
         return null;
     }

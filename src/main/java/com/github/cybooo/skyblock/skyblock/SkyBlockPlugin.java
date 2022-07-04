@@ -5,6 +5,7 @@ import com.github.cybooo.skyblock.skyblock.commands.SetSpawnCommand;
 import com.github.cybooo.skyblock.skyblock.database.MariaDB;
 import com.github.cybooo.skyblock.skyblock.island.IslandManager;
 import com.github.cybooo.skyblock.skyblock.listeners.PlayerListener;
+import com.github.cybooo.skyblock.skyblock.menus.MenuManager;
 import com.github.cybooo.skyblock.skyblock.schematic.SchematicLoader;
 import com.grinderwolf.swm.api.SlimePlugin;
 import com.grinderwolf.swm.api.exceptions.*;
@@ -25,6 +26,7 @@ public class SkyBlockPlugin extends JavaPlugin {
     private MariaDB mariaDB;
     private SlimePlugin slimePlugin;
     private IslandManager islandManager;
+    private MenuManager menuManager;
     private SchematicLoader schematicLoader;
 
     @Override
@@ -93,8 +95,8 @@ public class SkyBlockPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         islandManager.loadIslands();
-
         schematicLoader = new SchematicLoader(this);
+        menuManager = new MenuManager(this);
 
         getLogger().info("Plugin spusten za " + (System.currentTimeMillis() - start) + "ms!");
 
@@ -123,5 +125,9 @@ public class SkyBlockPlugin extends JavaPlugin {
 
     public SchematicLoader getSchematicLoader() {
         return schematicLoader;
+    }
+
+    public MenuManager getMenuManager() {
+        return menuManager;
     }
 }
