@@ -33,7 +33,7 @@ public class IslandManager {
                 String owner = resultSet.getString("owner");
                 String islandWorld = resultSet.getString("island_world");
 
-                String[] centerString = resultSet.getString("iland_center").split(",");
+                String[] centerString = resultSet.getString("island_center").split(",");
                 Location center = new Location(Bukkit.getWorld(islandWorld),
                         Double.parseDouble(centerString[0]),
                         Double.parseDouble(centerString[1]),
@@ -80,7 +80,7 @@ public class IslandManager {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                islandId = Integer.parseInt(resultSet.getRowId(1).toString());
+                islandId = Math.toIntExact(resultSet.getLong(1));
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
