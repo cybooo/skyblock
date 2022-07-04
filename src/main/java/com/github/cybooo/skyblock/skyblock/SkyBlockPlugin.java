@@ -11,12 +11,13 @@ import com.grinderwolf.swm.api.exceptions.*;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SkyBlockPlugin extends JavaPlugin {
 
@@ -49,7 +50,6 @@ public class SkyBlockPlugin extends JavaPlugin {
 
                 SlimeLoader slimeLoader = slimePlugin.getLoader("mysql");
 
-
                 if (!slimeLoader.worldExists(islandManager.getIslandWorldNamePrefix() + i)) {
                     getLogger().info("Vytvarim svet " + islandManager.getIslandWorldNamePrefix() + i);
                     try {
@@ -61,6 +61,16 @@ public class SkyBlockPlugin extends JavaPlugin {
                         e.printStackTrace();
                     }
                 } else {
+
+                    try (Connection connection = mariaDB.getConnection();
+                         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE worlds SET locked = ? WHERE name = ?")) {
+                        preparedStatement.setInt(1, 0);
+                        preparedStatement.setString(2, islandManager.getIslandWorldNamePrefix() + i);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException exception) {
+                        exception.printStackTrace();
+                    }
+
                     try {
                         slimePlugin.loadWorld(slimeLoader, islandManager.getIslandWorldNamePrefix() + i, false, new SlimePropertyMap());
                     } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
