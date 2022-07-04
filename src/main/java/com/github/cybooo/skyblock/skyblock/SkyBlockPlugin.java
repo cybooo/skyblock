@@ -74,7 +74,7 @@ public class SkyBlockPlugin extends JavaPlugin {
                     }
 
                     try {
-                        slimePlugin.loadWorld(slimeLoader, islandManager.getIslandWorldNamePrefix() + i, false, new SlimePropertyMap());
+                        slimePlugin.generateWorld(slimePlugin.loadWorld(slimeLoader, islandManager.getIslandWorldNamePrefix() + i, false, new SlimePropertyMap()));
                         islandManager.getIslands().putIfAbsent(islandManager.getIslandWorldNamePrefix() + i, new HashMap<>());
                     } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
                              WorldInUseException e) {

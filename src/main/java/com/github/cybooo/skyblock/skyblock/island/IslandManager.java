@@ -100,7 +100,7 @@ public class IslandManager {
                 (float) 0
         );
 
-        plugin.getSchematicLoader().loadSchematic(center);
+        plugin.getSchematicLoader().pasteSchematic(center);
 
         Island island = new Island(islandId, player.getName(), islandWorld, center, center);
         islands.get(islandWorld).put(player.getName(), island);
