@@ -42,6 +42,8 @@ public class SkyBlockPlugin extends JavaPlugin {
 
         slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
+        islandManager = new IslandManager(this);
+
         try {
             for (int i = 0; i < getConfig().getInt("settings.island-worlds"); i++) {
 
@@ -77,7 +79,6 @@ public class SkyBlockPlugin extends JavaPlugin {
         getCommand("island").setExecutor(new IslandCommand(this));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
-        islandManager = new IslandManager(this);
         islandManager.loadIslands();
 
         schematicLoader = new SchematicLoader(this);
