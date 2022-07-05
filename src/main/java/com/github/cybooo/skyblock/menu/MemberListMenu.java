@@ -1,8 +1,8 @@
-package com.github.cybooo.skyblock.skyblock.menus;
+package com.github.cybooo.skyblock.menu;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
-import com.github.cybooo.skyblock.skyblock.island.Island;
-import com.github.cybooo.skyblock.skyblock.utils.Utils;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.island.Island;
+import com.github.cybooo.skyblock.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 

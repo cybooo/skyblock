@@ -1,17 +1,19 @@
-package com.github.cybooo.skyblock.skyblock.menus;
+package com.github.cybooo.skyblock.menu;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
 
 public class MenuManager {
 
-    private SkyBlockPlugin plugin;
+    private final SkyBlockPlugin plugin;
     private final ControlPanelMenu controlPanelMenu;
     private final MemberListMenu memberListMenu;
+    private final AchievementsMenu achievementsMenu;
 
     public MenuManager(SkyBlockPlugin plugin) {
         this.plugin = plugin;
         this.controlPanelMenu = new ControlPanelMenu(plugin);
         this.memberListMenu = new MemberListMenu(plugin);
+        this.achievementsMenu = new AchievementsMenu(plugin);
     }
 
     public ControlPanelMenu getControlPanelMenu() {
@@ -20,5 +22,9 @@ public class MenuManager {
 
     public MemberListMenu getMemberListMenu() {
         return memberListMenu;
+    }
+
+    public AchievementsMenu getAchievementsMenu() {
+        return achievementsMenu;
     }
 }

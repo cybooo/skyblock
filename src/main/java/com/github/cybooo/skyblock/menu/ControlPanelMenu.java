@@ -1,8 +1,8 @@
-package com.github.cybooo.skyblock.skyblock.menus;
+package com.github.cybooo.skyblock.menu;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
-import com.github.cybooo.skyblock.skyblock.island.Island;
-import com.github.cybooo.skyblock.skyblock.utils.Utils;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.island.Island;
+import com.github.cybooo.skyblock.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,6 +29,7 @@ public class ControlPanelMenu implements Listener {
 
         Island island = plugin.getIslandManager().getIsland(player);
         if (island == null) {
+            player.sendMessage("§cNemáš žádný ostrov! Vytvoř si ho přes /island!");
             return;
         }
 
@@ -76,7 +77,8 @@ public class ControlPanelMenu implements Listener {
             Player player = (Player) event.getWhoClicked();
             switch (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())) {
                 case "Seznam členů" -> plugin.getMenuManager().getMemberListMenu().open(player);
-                case "Teleport na ostrov" -> player.teleport(plugin.getIslandManager().getIsland(player).getSpawnLocation());
+                case "Teleport na ostrov" ->
+                        player.teleport(plugin.getIslandManager().getIsland(player).getSpawnLocation());
             }
         }
     }

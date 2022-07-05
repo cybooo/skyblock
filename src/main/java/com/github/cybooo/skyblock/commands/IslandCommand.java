@@ -1,7 +1,7 @@
-package com.github.cybooo.skyblock.skyblock.commands;
+package com.github.cybooo.skyblock.commands;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
-import com.github.cybooo.skyblock.skyblock.island.Island;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.island.Island;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;

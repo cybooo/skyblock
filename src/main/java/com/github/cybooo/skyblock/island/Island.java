@@ -1,4 +1,4 @@
-package com.github.cybooo.skyblock.skyblock.island;
+package com.github.cybooo.skyblock.island;
 
 
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ public class Island {
     private final String islandWorld;
     private final Location islandCenter;
     private Location spawnLocation;
-    private List<String> members;
+    private final List<String> members;
 
     public Island(int id, String owner, long createdMillis, String islandWorld, Location islandCenter, Location spawnLocation, List<String> members) {
         this.id = id;

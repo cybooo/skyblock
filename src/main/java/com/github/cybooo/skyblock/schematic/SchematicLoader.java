@@ -1,6 +1,6 @@
-package com.github.cybooo.skyblock.skyblock.schematic;
+package com.github.cybooo.skyblock.schematic;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.math.BlockVector3;

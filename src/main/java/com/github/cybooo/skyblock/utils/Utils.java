@@ -1,9 +1,11 @@
-package com.github.cybooo.skyblock.skyblock.utils;
+package com.github.cybooo.skyblock.utils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.text.DecimalFormat;
 
 public class Utils {
 
@@ -38,6 +40,11 @@ public class Utils {
                 inventory.setItem(lr, item);
             }
         }
+    }
+
+    public static String formatCurrency(double amount) {
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###,###.##");
+        return decimalFormat.format(amount);
     }
 
 }

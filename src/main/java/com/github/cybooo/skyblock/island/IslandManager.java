@@ -1,6 +1,7 @@
-package com.github.cybooo.skyblock.skyblock.island;
+package com.github.cybooo.skyblock.island;
 
-import com.github.cybooo.skyblock.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.SkyBlockPlugin;
+import com.github.cybooo.skyblock.achievements.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -140,6 +141,7 @@ public class IslandManager {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             player.teleport(island.getSpawnLocation());
             player.sendTitle("§c§lSkyBlock", "§7Užij si hru!", 5, 40, 5);
+            plugin.getAchievementManager().addAchievementProgress(player, Achievement.CREATE_ISLAND, 1);
         }, 20L);
     }
 

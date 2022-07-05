@@ -1,4 +1,4 @@
-package com.github.cybooo.skyblock.skyblock.database;
+package com.github.cybooo.skyblock.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
@@ -22,7 +22,7 @@ public class MariaDB {
         hikariDataSource.setMinimumIdle(5);
         hikariDataSource.setPoolName("skyblock-mariadb");
         hikariDataSource.addDataSourceProperty("url",
-                "jdbc:mariadb://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=UTF-8&useSSL=false");
+                "jdbc:mariadb://" + host + ":" + port + "/" + database + "?useUnicode=true§characterEncoding=UTF-8§useSSL=false");
         hikariDataSource.addDataSourceProperty("user", username);
         hikariDataSource.addDataSourceProperty("password", password);
 
@@ -45,9 +45,26 @@ public class MariaDB {
                              "island_id INT NOT NULL," +
                              " player_name VARCHAR(16) NOT NULL" +
 
-                             ")")) {
+                             ")");
+             PreparedStatement preparedStatement2 = connection.prepareStatement(
+                     "CREATE TABLE IF NOT EXISTS achievements (" +
+                             "player_name VARCHAR(16) NOT NULL," +
+                             " achievement_id INT NOT NULL," +
+                             " progress INT NOT NULL," +
+                             " completed INT NOT NULL" +
+                             ");"
+             );
+             PreparedStatement preparedStatement3 = connection.prepareStatement(
+                     "CREATE TABLE IF NOT EXISTS player_data (" +
+                             "player_name VARCHAR(16) NOT NULL," +
+                             " money DOUBLE NOT NULL," +
+                             " time_played INT NOT NULL," +
+                             " PRIMARY KEY (player_name));"
+             )) {
             preparedStatement.execute();
             preparedStatement1.execute();
+            preparedStatement2.execute();
+            preparedStatement3.execute();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
