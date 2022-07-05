@@ -48,7 +48,7 @@ public class Utils {
     }
 
     public static String formatString(String input) {
-        return input.toLowerCase().substring(0, 1).toLowerCase() + input.substring(1).replace("_", "");
+        return input.toLowerCase().substring(0, 1).toLowerCase() + input.substring(1).replace("_", " ");
     }
 
 }
