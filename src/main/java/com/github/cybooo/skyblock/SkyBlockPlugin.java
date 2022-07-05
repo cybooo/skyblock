@@ -1,10 +1,7 @@
 package com.github.cybooo.skyblock;
 
 import com.github.cybooo.skyblock.achievements.AchievementManager;
-import com.github.cybooo.skyblock.commands.AchievementsCommand;
-import com.github.cybooo.skyblock.commands.IslandCommand;
-import com.github.cybooo.skyblock.commands.MoneyCommand;
-import com.github.cybooo.skyblock.commands.SetSpawnCommand;
+import com.github.cybooo.skyblock.commands.*;
 import com.github.cybooo.skyblock.database.MariaDB;
 import com.github.cybooo.skyblock.economy.EconomyImpl;
 import com.github.cybooo.skyblock.island.IslandManager;
@@ -111,6 +108,7 @@ public class SkyBlockPlugin extends JavaPlugin {
         getCommand("island").setExecutor(new IslandCommand(this));
         getCommand("money").setExecutor(new MoneyCommand(this));
         getCommand("achievements").setExecutor(new AchievementsCommand(this));
+        getCommand("shop").setExecutor(new ShopCommand(this));
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 

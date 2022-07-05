@@ -47,4 +47,8 @@ public class Utils {
         return decimalFormat.format(amount);
     }
 
+    public static String formatString(String input) {
+        return input.toLowerCase().substring(0, 1).toUpperCase() + input.substring(1).replace("_", "");
+    }
+
 }
