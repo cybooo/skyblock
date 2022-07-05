@@ -43,7 +43,7 @@ public class ControlPanelMenu implements Listener {
                 "",
                 "§7Vlastník: §a" + island.getOwner(),
                 "§7Datum vytvoření: §a" + Utils.millisToDate(island.getCreatedMillis()),
-                "§7Členové: §a" + island.getMembers() + "/4",
+                "§7Členové: §a" + island.getMembers().size() + "/4",
                 ""
         ));
         info.setItemMeta(infoItemMeta);
