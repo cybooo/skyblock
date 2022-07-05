@@ -270,12 +270,14 @@ public class IslandManager {
         if (island == null) {
             return false;
         }
-        int minX = island.getIslandCenter().getBlockX() - 150;
-        int maxX = island.getIslandCenter().getBlockX() + 150;
-        int minZ = island.getIslandCenter().getBlockZ() - 150;
-        int maxZ = island.getIslandCenter().getBlockZ() + 150;
-        if (player.getLocation().getBlockX() >= minX && player.getLocation().getBlockX() <= maxX) {
-            return player.getLocation().getBlockZ() >= minZ && player.getLocation().getBlockZ() <= maxZ;
+        if (player.getWorld().getName().equals(island.getIslandWorld())) {
+            int minX = island.getIslandCenter().getBlockX() - 150;
+            int maxX = island.getIslandCenter().getBlockX() + 150;
+            int minZ = island.getIslandCenter().getBlockZ() - 150;
+            int maxZ = island.getIslandCenter().getBlockZ() + 150;
+            if (player.getLocation().getBlockX() >= minX && player.getLocation().getBlockX() <= maxX) {
+                return player.getLocation().getBlockZ() >= minZ && player.getLocation().getBlockZ() <= maxZ;
+            }
         }
         return false;
     }
