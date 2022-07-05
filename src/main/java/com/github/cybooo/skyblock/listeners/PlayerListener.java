@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -68,10 +69,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if (event.isCancelled()) {
-            return;
-        }
-        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+        if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
             event.setCancelled(true);
             return;
         }
@@ -81,10 +79,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if (event.isCancelled()) {
-            return;
-        }
-        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+        if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
             event.setCancelled(true);
         }
     }
@@ -94,9 +89,13 @@ public class PlayerListener implements Listener {
         if (event.isCancelled()) {
             return;
         }
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK ||
+                event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR) {
+            return;
+        }
 
         Player player = event.getPlayer();
-        if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+        if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
             event.setCancelled(true);
         }
     }
@@ -104,7 +103,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player player) {
-            if (plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
+            if (!plugin.getIslandManager().isInIsland(player, plugin.getIslandManager().getIsland(player))) {
                 event.setCancelled(true);
             }
         }

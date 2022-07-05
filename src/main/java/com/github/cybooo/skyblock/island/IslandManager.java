@@ -268,14 +268,14 @@ public class IslandManager {
 
     public boolean isInIsland(Player player, Island island) {
         if (island == null) {
-            return true;
+            return false;
         }
         int minX = island.getIslandCenter().getBlockX() - 150;
         int maxX = island.getIslandCenter().getBlockX() + 150;
         int minZ = island.getIslandCenter().getBlockZ() - 150;
         int maxZ = island.getIslandCenter().getBlockZ() + 150;
-        if (player.getLocation().getBlockX() <= minX && player.getLocation().getBlockX() <= maxX) {
-            return player.getLocation().getBlockZ() <= minZ && player.getLocation().getBlockZ() <= maxZ;
+        if (player.getLocation().getBlockX() >= minX && player.getLocation().getBlockX() <= maxX) {
+            return player.getLocation().getBlockZ() >= minZ && player.getLocation().getBlockZ() <= maxZ;
         }
         return false;
     }

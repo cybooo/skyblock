@@ -64,6 +64,7 @@ public class ControlPanelMenu implements Listener {
         ItemMeta setSpawnMeta = setSpawn.getItemMeta();
         setSpawnMeta.setDisplayName("§6§lNastavit spawn ostrova");
         setSpawnMeta.setLore(Arrays.asList("", "§eKlikni pro nastavení spawnu ostrova."));
+        setSpawn.setItemMeta(setSpawnMeta);
 
         inventory.setItem(4, info);
         inventory.setItem(10, teleport);
@@ -91,10 +92,14 @@ public class ControlPanelMenu implements Listener {
                 case "Nastavit spawn ostrova" -> {
                     Island island = plugin.getIslandManager().getIsland(player);
                     if (island.getOwner().equals(player.getName())) {
-                        plugin.getIslandManager().setIslandSpawn(island, player.getLocation());
-                        island.setSpawnLocation(player.getLocation());
-                        player.sendMessage("§aSpawn ostrova nastaven!");
-                        player.closeInventory();
+                        if (plugin.getIslandManager().isInIsland(player, island)) {
+                            plugin.getIslandManager().setIslandSpawn(island, player.getLocation());
+                            island.setSpawnLocation(player.getLocation());
+                            player.sendMessage("§aSpawn ostrova nastaven!");
+                            player.closeInventory();
+                        } else {
+                            player.sendMessage("§cMusíš být na svém ostrově!");
+                        }
                     }
                 }
             }
