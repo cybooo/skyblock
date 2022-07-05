@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -134,6 +135,12 @@ public class SkyBlockPlugin extends JavaPlugin {
             world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
             world.setDifficulty(Difficulty.PEACEFUL);
         }
+
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                playerManager.getPlayerData(player.getName()).addTimePlayed(1);
+            }
+        }, 0L, 20L);
 
         getLogger().info("Plugin spusten za " + (System.currentTimeMillis() - start) + "ms!");
 
