@@ -65,15 +65,15 @@ public class EconomyImpl implements Economy {
     }
 
     public double getBalance(OfflinePlayer player) {
-        return plugin.getPlayerManager().getPlayerData(player.getName()).getMoney();
+        return getBalance(player.getName());
     }
 
     public double getBalance(String playerName, String world) {
-        return plugin.getPlayerManager().getPlayerData(playerName).getMoney();
+        return getBalance(playerName);
     }
 
     public double getBalance(OfflinePlayer player, String world) {
-        return plugin.getPlayerManager().getPlayerData(player.getName()).getMoney();
+        return getBalance(player);
     }
 
     public boolean has(String playerName, double amount) {
@@ -82,15 +82,15 @@ public class EconomyImpl implements Economy {
     }
 
     public boolean has(OfflinePlayer player, double amount) {
-        return plugin.getPlayerManager().getPlayerData(player.getName()).getMoney() >= amount;
+        return has(player.getName(), amount);
     }
 
     public boolean has(String playerName, String worldName, double amount) {
-        return plugin.getPlayerManager().getPlayerData(playerName).getMoney() >= amount;
+        return has(playerName, amount);
     }
 
     public boolean has(OfflinePlayer player, String worldName, double amount) {
-        return plugin.getPlayerManager().getPlayerData(player.getName()).getMoney() >= amount;
+        return has(player, amount);
     }
 
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
@@ -102,27 +102,15 @@ public class EconomyImpl implements Economy {
     }
 
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
-        if (plugin.getPlayerManager().getPlayerData(player.getName()).getMoney() >= amount) {
-            plugin.getPlayerManager().getPlayerData(player.getName()).removeMoney(amount);
-            return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
-        }
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.FAILURE, "");
+        return withdrawPlayer(player.getName(), amount);
     }
 
     public EconomyResponse withdrawPlayer(String playerName, String worldName, double amount) {
-        if (plugin.getPlayerManager().getPlayerData(playerName).getMoney() >= amount) {
-            plugin.getPlayerManager().getPlayerData(playerName).removeMoney(amount);
-            return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(playerName).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
-        }
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(playerName).getMoney(), EconomyResponse.ResponseType.FAILURE, "");
+        return withdrawPlayer(playerName, amount);
     }
 
     public EconomyResponse withdrawPlayer(OfflinePlayer player, String worldName, double amount) {
-        if (plugin.getPlayerManager().getPlayerData(player.getName()).getMoney() >= amount) {
-            plugin.getPlayerManager().getPlayerData(player.getName()).removeMoney(amount);
-            return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
-        }
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.FAILURE, "");
+        return withdrawPlayer(player, amount);
     }
 
     public EconomyResponse depositPlayer(String playerName, double amount) {
@@ -131,18 +119,15 @@ public class EconomyImpl implements Economy {
     }
 
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        plugin.getPlayerManager().getPlayerData(player.getName()).addMoney(amount);
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
+        return depositPlayer(player.getName(), amount);
     }
 
     public EconomyResponse depositPlayer(String playerName, String worldName, double amount) {
-        plugin.getPlayerManager().getPlayerData(playerName).addMoney(amount);
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(playerName).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
+        return depositPlayer(playerName, amount);
     }
 
     public EconomyResponse depositPlayer(OfflinePlayer player, String worldName, double amount) {
-        plugin.getPlayerManager().getPlayerData(player.getName()).addMoney(amount);
-        return new EconomyResponse(amount, plugin.getPlayerManager().getPlayerData(player.getName()).getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
+        return depositPlayer(player, amount);
     }
 
     public EconomyResponse createBank(String name, String player) {
