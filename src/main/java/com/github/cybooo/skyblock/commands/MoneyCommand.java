@@ -21,7 +21,7 @@ public class MoneyCommand implements CommandExecutor {
             sender.sendMessage("Tento prikaz neni dostupny z konzole.");
             return false;
         }
-        player.sendMessage("§aStav konta: §2§l" + plugin.getEconomy().getBalance(player));
+        player.sendMessage("§aStav konta: §2§l" + plugin.getEconomy().getBalance(player) + "§a Mincí");
         return true;
     }
 }
