@@ -199,7 +199,12 @@ public class IslandManager {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try (Connection connection = plugin.getMariaDB().getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skyblock_islands SET spawn_location = ? WHERE id = ?;")) {
-                preparedStatement.setString(1, spawn.getX() + "," + spawn.getY() + "," + spawn.getZ() + "," + spawn.getPitch() + "," + spawn.getYaw());
+                double x = Math.round(spawn.getX() * 1000.0) / 1000.0;
+                double y = Math.round(spawn.getX() * 1000.0) / 1000.0;
+                double z = Math.round(spawn.getX() * 1000.0) / 1000.0;
+                double yaw = Math.round(spawn.getYaw() * 1000.0) / 1000.0;
+                double pitch = Math.round(spawn.getPitch() * 1000.0) / 1000.0;
+                preparedStatement.setString(1, x + "," + y + "," + z + "," + yaw + "," + pitch);
                 preparedStatement.setInt(2, island.getId());
                 preparedStatement.executeUpdate();
             } catch (SQLException exception) {
