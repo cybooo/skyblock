@@ -15,6 +15,9 @@ import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -109,6 +112,7 @@ public class SkyBlockPlugin extends JavaPlugin {
         getCommand("money").setExecutor(new MoneyCommand(this));
         getCommand("achievements").setExecutor(new AchievementsCommand(this));
         getCommand("shop").setExecutor(new ShopCommand(this));
+        getCommand("spawn").setExecutor(new SpawnCommand(this));
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -118,6 +122,18 @@ public class SkyBlockPlugin extends JavaPlugin {
 
         playerManager = new PlayerManager(this);
         achievementManager = new AchievementManager(this);
+
+        World world = Bukkit.getWorld("world");
+        if (world != null) {
+            world.setStorm(false);
+            world.setThundering(false);
+            world.setWeatherDuration(Integer.MAX_VALUE);
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            world.setGameRule(GameRule.DO_FIRE_TICK, false);
+            world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+            world.setDifficulty(Difficulty.PEACEFUL);
+        }
 
         getLogger().info("Plugin spusten za " + (System.currentTimeMillis() - start) + "ms!");
 

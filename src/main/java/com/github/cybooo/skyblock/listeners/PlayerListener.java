@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -26,6 +27,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        event.setJoinMessage("§a§l + §a" + player.getName());
+
         if (plugin.getConfig().getString("spawn.world") == null) {
             return;
         }
@@ -41,6 +45,7 @@ public class PlayerListener implements Listener {
         if (plugin.getEconomy().getBalance(player) == 0) {
             plugin.getEconomy().depositPlayer(player, 100000);
         }
+
         plugin.getAchievementManager().registerIntoDatabase(player);
         plugin.getPlayerManager().getPlayerData(player.getName());
     }
@@ -48,6 +53,16 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         plugin.getPlayerManager().saveDataIntoDatabase(event.getPlayer());
+        event.setQuitMessage("§c§l- §c" + event.getPlayer().getName());
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            if (player.getWorld().getName().equals("world")) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler
