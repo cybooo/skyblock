@@ -69,6 +69,7 @@ public class PlayerManager {
                 exception.printStackTrace();
             }
         });
+        dataMap.remove(player.getName());
     }
 
     public Map<String, PlayerData> getDataMap() {
