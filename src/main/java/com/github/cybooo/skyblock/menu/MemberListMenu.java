@@ -36,6 +36,7 @@ public class MemberListMenu implements Listener {
         ItemStack owner = new ItemStack(Material.PAPER);
         ItemMeta ownerMeta = owner.getItemMeta();
         ownerMeta.setDisplayName("§2§l" + island.getOwner());
+        ownerMeta.setLore(Arrays.asList("", "§aVlastník ostrova"));
         owner.setItemMeta(ownerMeta);
         inventory.setItem(10, owner);
 
