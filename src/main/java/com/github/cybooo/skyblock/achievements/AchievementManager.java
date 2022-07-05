@@ -40,7 +40,6 @@ public class AchievementManager {
             }
             Bukkit.getScheduler().runTask(plugin, () -> {
                 plugin.getAchievementManager().getDataMap().put(player, new AchievementData(plugin, player).cache());
-                plugin.getLogger().info("Pocet zaznamu v cache: " + plugin.getAchievementManager().getData(player).getPendingAchievements().size());
             });
         });
     }

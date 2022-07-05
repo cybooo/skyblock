@@ -68,10 +68,8 @@ public class IslandManager {
                         preparedStatement.setInt(1, entry1.getValue().getId());
                         ResultSet resultSet = preparedStatement.executeQuery();
                         List<String> members = new ArrayList<>();
-                        Bukkit.getLogger().info("Loading members for island " + entry1.getValue().getId());
                         while (resultSet.next()) {
                             members.add(resultSet.getString("player_name"));
-                            plugin.getLogger().info("Loaded member: " + resultSet.getString("player_name"));
                         }
                         entry1.getValue().getMembers().addAll(members);
                     }
