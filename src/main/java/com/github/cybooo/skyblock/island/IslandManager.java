@@ -200,8 +200,8 @@ public class IslandManager {
             try (Connection connection = plugin.getMariaDB().getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement("UPDATE skyblock_islands SET spawn_location = ? WHERE id = ?;")) {
                 double x = Math.round(spawn.getX() * 1000.0) / 1000.0;
-                double y = Math.round(spawn.getX() * 1000.0) / 1000.0;
-                double z = Math.round(spawn.getX() * 1000.0) / 1000.0;
+                double y = Math.round(spawn.getY() * 1000.0) / 1000.0;
+                double z = Math.round(spawn.getZ() * 1000.0) / 1000.0;
                 double yaw = Math.round(spawn.getYaw() * 1000.0) / 1000.0;
                 double pitch = Math.round(spawn.getPitch() * 1000.0) / 1000.0;
                 preparedStatement.setString(1, x + "," + y + "," + z + "," + yaw + "," + pitch);
