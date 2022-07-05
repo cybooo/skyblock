@@ -35,8 +35,8 @@ public class ShopMenu implements Listener {
 
             List<String> lore = new ArrayList<>();
             lore.add("");
-            lore.add("§fNákupní cena: §e" + shopItem.getBuyPrice());
-            lore.add("§fProdejní cena: §e" + shopItem.getSellPrice());
+            lore.add("§fNákupní cena: §e" + shopItem.getBuyPrice() + " Mincí");
+            lore.add("§fProdejní cena: §e" + shopItem.getSellPrice() + " Mincí");
             lore.add("");
             lore.add("§eKlikni levým pro nákup");
             lore.add("§eKlikni pravým pro prodej");

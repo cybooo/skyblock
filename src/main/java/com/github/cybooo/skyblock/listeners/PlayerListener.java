@@ -31,16 +31,15 @@ public class PlayerListener implements Listener {
 
         event.setJoinMessage("§a§l + §a" + player.getName());
 
-        if (plugin.getConfig().getString("spawn.world") == null) {
-            return;
+        if (plugin.getConfig().getString("spawn.world") != null) {
+            Location location = new Location(Bukkit.getWorld(plugin.getConfig().getString("spawn.world")),
+                    plugin.getConfig().getDouble("spawn.x"),
+                    plugin.getConfig().getDouble("spawn.y"),
+                    plugin.getConfig().getDouble("spawn.z"),
+                    (float) plugin.getConfig().getDouble("spawn.yaw"),
+                    (float) plugin.getConfig().getDouble("spawn.pitch"));
+            player.teleport(location);
         }
-        Location location = new Location(Bukkit.getWorld(plugin.getConfig().getString("spawn.world")),
-                plugin.getConfig().getDouble("spawn.x"),
-                plugin.getConfig().getDouble("spawn.y"),
-                plugin.getConfig().getDouble("spawn.z"),
-                (float) plugin.getConfig().getDouble("spawn.yaw"),
-                (float) plugin.getConfig().getDouble("spawn.pitch"));
-        player.teleport(location);
 
         // Pro testovací potřeby.
         if (plugin.getEconomy().getBalance(player) == 0) {
