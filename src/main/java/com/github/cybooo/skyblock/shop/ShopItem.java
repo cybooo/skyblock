@@ -4,7 +4,10 @@ import org.bukkit.Material;
 
 public enum ShopItem {
 
-    GRASS_BLOCK(Material.GRASS_BLOCK, 100, 15);
+    GRASS_BLOCK(Material.GRASS_BLOCK, 100, 15),
+    DIAMOND_SWORD(Material.DIAMOND_SWORD, 1000, 100),
+    WATER_BUCKET(Material.WATER_BUCKET, 750, 75),
+    LAVA_BUCKET(Material.LAVA_BUCKET, 750, 75);
 
     private final Material material;
     private final int buyPrice;
