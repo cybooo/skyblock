@@ -48,7 +48,15 @@ public class Utils {
     }
 
     public static String formatString(String input) {
-        return input.toLowerCase().substring(0, 1).toLowerCase() + input.substring(1).replace("_", " ");
+        StringBuilder sb = new StringBuilder(input.toLowerCase());
+        for (int i = 0; i < sb.length(); i++) {
+            if (i == 0) {
+                sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
+            } else if (sb.charAt(i - 1) == ' ') {
+                sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
+            }
+        }
+        return sb.toString().replace("_", " ");
     }
 
 }
